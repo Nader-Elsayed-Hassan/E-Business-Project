@@ -1,12 +1,6 @@
 const express = require("express");
 const app = express();
 app.use(express.json());
-app.get("/", (req, res, _next) => {
-  res.status(200).json({
-    status: "success",
-    data: "Hello to the base page",
-  });
-});
 const doctors = [
   {
     name: "Dr. Sarah Ahmed",
@@ -44,7 +38,49 @@ const students = [
     address: "Ismailia, Egypt",
   },
 ];
+app.post("/student", (req, res) => {
+  const { name, age, level, address } = req.body;
+  if (!parseInt(age)) {
+    res.status(400).json({
+      status: "error",
+      data: "Age is invailed",
+    });
+    return;
+  }
+  if(!name || !age || !level || !address) {
+    res.status(400).json({
+      status: "error",
+      date: "You must fill all data",
+    });
+    return;
+  }
+  const newStudent = {
+    name,
+    age,
+    level,
+    address,
+  };
+  students.push(newStudent);
+  res.status(200).json({
+    status: "success",
+    data: newStudent,
+  });
+});
 
+//todo Hardcoded
+app.post("/student/hardcoded", (req, res) => {
+  const hardcodedStudent = {
+    name: "Mona Hassan",
+    age: 21,
+    level: "Sophomore",
+    address: "Giza, Egypt",
+  };
+  students.push(hardcodedStudent);
+  res.status(200).json({
+    status: "success",
+    data: hardcodedStudent,
+  });
+});
 app.post("/doctor", (req, res) => {
   const { name, age, phone } = req.query;
   if (!parseInt(age)) {
@@ -80,34 +116,6 @@ app.get("/student", (req, res) => {
   });
 });
 
-app.post("/student", (req, res) => {
-  const { name, age, level, address } = req.body;
-  if (!parseInt(age)) {
-    res.status(400).json({
-      status: "error",
-      data: "Age is invailed",
-    });
-    return;
-  }
-  if(!name || !age || !level || !address) {
-    res.status(400).json({
-      status: "error",
-      date: "You must fill all data",
-    });
-    return;
-  }
-  const newStudent = {
-    name,
-    age,
-    level,
-    address,
-  };
-  students.push(newStudent);
-  res.status(200).json({
-    status: "success",
-    data: newStudent,
-  });
-});
 app.delete("/student", (req, res) => {
   const { name } = req.query;
   const studentIndex = students.findIndex((student) => student.name === name);
@@ -149,13 +157,9 @@ app.get("/doctorandstudent", (req, res) => {
     },
   });
 });
-app.get("/doctor", (req, res) => { 
-  res.status(200).json({
-    status: "success",
-    data: doctors,
-  });
-});
 function listenFunction() {
-  console.log("server is listening on port 803");
+  console.log("server is listening on port 8080");
 }
 app.listen(8080, listenFunction());
+
+// node index.js
