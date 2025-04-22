@@ -1,6 +1,14 @@
 const express = require("express");
+const mongoose = require("mongoose");
+const Student = require("./model/studentModel.js")
 const app = express();
 app.use(express.json());
+const uri = "mongodb+srv://Avengers:Avengers123456789@cluster0.vel7nep.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
+
+mongoose.connect(uri).catch((e) => {
+  console.log(e);
+})
+
 const doctors = [
   {
     name: "Dr. Sarah Ahmed",
@@ -67,7 +75,21 @@ app.post("/student", (req, res) => {
   });
 });
 
-//todo Hardcoded
+app.post("/student/Database", async (req,res) => {
+   const { name, age, level, address } = req.body;
+  const newStudent = await Student.create({ name, age, level, address });
+  res.status(201).json({
+    status: "success",
+    data: newStudent,
+  });
+})
+app.get("/student/Database", async (req,res) => {
+  const students = await Student.find();
+  res.status(201).json({
+    status: "success",
+    data: students,
+  });
+})
 app.post("/student/hardcoded", (req, res) => {
   const hardcodedStudent = {
     name: "Mona Hassan",
