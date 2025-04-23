@@ -85,7 +85,7 @@ app.post("/student/Database", async (req,res) => {
 })
 app.get("/student/Database", async (req,res) => {
   const students = await Student.find();
-  res.status(201).json({
+  res.status(200).json({
     status: "success",
     data: students,
   });
