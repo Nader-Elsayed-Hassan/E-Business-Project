@@ -46,17 +46,17 @@ const students = [
     address: "Ismailia, Egypt",
   },
 ];
-app.post("/student", (req, res) => {
-  const { name, age, level, address } = req.body;
+app.post("/student", (request, response) => {
+  const { name, age, level, address } = request.body;
   if (!parseInt(age)) {
-    res.status(400).json({
+    response.status(400).json({
       status: "error",
       data: "Age is invailed",
     });
     return;
   }
   if(!name || !age || !level || !address) {
-    res.status(400).json({
+    response.status(400).json({
       status: "error",
       date: "You must fill all data",
     });
@@ -69,28 +69,28 @@ app.post("/student", (req, res) => {
     address,
   };
   students.push(newStudent);
-  res.status(200).json({
+  response.status(200).json({
     status: "success",
     data: newStudent,
   });
 });
 
-app.post("/student/Database", async (req,res) => {
-   const { name, age, level, address } = req.body;
+app.post("/student/Database", async (request,response) => {
+   const { name, age, level, address } = request.body;
   const newStudent = await Student.create({ name, age, level, address });
-  res.status(201).json({
+  response.status(201).json({
     status: "success",
     data: newStudent,
   });
 })
-app.get("/student/Database", async (req,res) => {
+app.get("/student/Database", async (request,response) => {
   const students = await Student.find();
-  res.status(200).json({
+  response.status(200).json({
     status: "success",
     data: students,
   });
 })
-app.post("/student/hardcoded", (req, res) => {
+app.post("/student/hardcoded", (request, response) => {
   const hardcodedStudent = {
     name: "Mona Hassan",
     age: 21,
@@ -98,22 +98,22 @@ app.post("/student/hardcoded", (req, res) => {
     address: "Giza, Egypt",
   };
   students.push(hardcodedStudent);
-  res.status(200).json({
+  response.status(200).json({
     status: "success",
     data: hardcodedStudent,
   });
 });
-app.post("/doctor", (req, res) => {
-  const { name, age, phone } = req.query;
+app.post("/doctor", (request, response) => {
+  const { name, age, phone } = request.query;
   if (!parseInt(age)) {
-    res.status(400).json({
+    response.status(400).json({
       status: "error",
       data: "Age is invailed",
     });
     return;
   }
   if (!name || !age || !phone) {
-    res.status(400).json({
+    response.status(400).json({
       status: "error",
       date: "You must fill all data",
     });
@@ -125,53 +125,53 @@ app.post("/doctor", (req, res) => {
     phone,
   };
   doctors.push(newDoctor);
-  res.status(200).json({
+  response.status(200).json({
     status: "success",
     data: newDoctor,
   });
 });
 
-app.get("/student", (req, res) => { 
-  res.status(200).json({
+app.get("/student", (request, response) => { 
+  response.status(200).json({
     status: "success",
     data: students,
   });
 });
 
-app.delete("/student", (req, res) => {
-  const { name } = req.query;
+app.delete("/student", (request, response) => {
+  const { name } = request.query;
   const studentIndex = students.findIndex((student) => student.name === name);
   if (studentIndex === -1) {
-    res.status(404).json({
+    response.status(404).json({
       status: "error",
       data: "Student not found",
     });
     return;
   }
   students.splice(studentIndex, 1);
-  res.status(200).json({
+  response.status(200).json({
     status: "success",
     data: "Student deleted successfully",
   });
 });
-app.patch("/doctor", (req, res) => { 
-  const { oldName, newName } = req.query;
+app.patch("/doctor", (request, response) => { 
+  const { oldName, newName } = request.query;
   const doctorIndex = doctors.findIndex((doctor) => doctor.name === oldName);
   if (doctorIndex === -1) {
-    res.status(404).json({
+    response.status(404).json({
       status: "error",
       data: "Doctor not found",
     });
     return;
   }
   doctors[doctorIndex].name = newName;
-  res.status(200).json({
+  response.status(200).json({
     status: "success",
     data: doctors[doctorIndex],
   });
 });
-app.get("/doctorandstudent", (req, res) => { 
-  res.status(200).json({
+app.get("/doctorandstudent", (request, response) => { 
+  response.status(200).json({
     status: "success",
     data: {
       doctors,
